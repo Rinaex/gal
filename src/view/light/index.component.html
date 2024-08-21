@@ -1,0 +1,148 @@
+<div
+  class="index-wrapper dark-bg"
+  [class.noimg]="serviceCommon.settings.lightImages.length <= 0"
+>
+  <div class="light-box">
+    <main class="homepage dark-border-color dark-bg">
+      <nav class="top-nav dark-scrollbar dark-border-color dark-bg">
+        <span
+          *ngFor="
+            let item of serviceCommon.websiteList.slice(
+              0,
+              serviceCommon.overIndex
+            );
+            index as i;
+            trackBy: serviceCommon.trackByItem
+          "
+          (click)="serviceCommon.handleCilckTopNav(i)"
+          [class.active]="serviceCommon.page === i"
+          [class.dark-text-active]="serviceCommon.page === i"
+          class="over-item ripple-btn dark-text"
+        >
+          {{ item.title }}
+        </span>
+        <!-- More -->
+        <app-web-more-menu
+          *ngIf="serviceCommon.overIndex < serviceCommon.websiteList.length"
+          [data]="
+            serviceCommon.websiteList.slice(serviceCommon.overIndex, 99999)
+          "
+          [index]="serviceCommon.overIndex"
+          [page]="serviceCommon.page"
+          (onClick)="serviceCommon.handleCilckTopNav($event)"
+        />
+      </nav>
+
+      <section class="index-section user-select-none dark-bg">
+        <aside
+          class="sidebar dark-bg dark-border-color dark-scrollbar"
+          id="sidebar"
+        >
+          <div *ngIf="serviceCommon.websiteList[serviceCommon.page]">
+            <div
+              class="tag dark-text"
+              [class.active]="serviceCommon.id === i"
+              [class.dark-item-active]="serviceCommon.id === i"
+              (click)="serviceCommon.handleSidebarNav(i)"
+              *ngFor="
+                let item of serviceCommon.websiteList[serviceCommon.page].nav;
+                index as i;
+                trackBy: serviceCommon.trackByItem
+              "
+            >
+              {{ item.title }}
+            </div>
+          </div>
+        </aside>
+
+        <div class="main dark-scrollbar">
+          <app-search-engine></app-search-engine>
+
+          <div *ngIf="serviceCommon.currentList.length > 0; else noData">
+            <nz-spin
+              nzSimple
+              *ngIf="serviceCommon.sliceMax === 0"
+              class="position-center"
+            ></nz-spin>
+            <div
+              *ngFor="
+                let item of serviceCommon.currentList.slice(
+                  0,
+                  serviceCommon.sliceMax
+                );
+                index as i;
+                trackBy: serviceCommon.trackByItem
+              "
+            >
+              <app-toolbar-title
+                [dataSource]="item"
+                (onCollapse)="serviceCommon.onCollapse(item, i)"
+                [index]="i"
+              >
+              </app-toolbar-title>
+
+              <div
+                style="padding: 0 10px"
+                nz-row
+                [nzGutter]="[16, 16]"
+                [style.display]="item.collapsed ? 'none' : ''"
+              >
+                <div
+                  class="gutter-row"
+                  nz-col
+                  [nzSpan]="8"
+                  [nzSm]="12"
+                  [nzMd]="8"
+                  [nzXs]="24"
+                  *ngFor="
+                    let el of item.nav;
+                    index as j;
+                    trackBy: serviceCommon.trackByItemWeb
+                  "
+                >
+                  <app-card
+                    [cardStyle]="serviceCommon.settings.lightCardStyle"
+                    [dataSource]="el"
+                    [indexs]="[serviceCommon.page, serviceCommon.id, i, j]"
+                    [searchKeyword]="serviceCommon.searchKeyword"
+                    class="column-border"
+                  ></app-card>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noData>
+            <app-no-data></app-no-data>
+          </ng-template>
+        </div>
+      </section>
+    </main>
+
+    <div
+      class="right dark-scrollbar"
+      *ngIf="serviceCommon.settings.lightImages.length > 0"
+    >
+      <div
+        class="aditem"
+        *ngFor="let item of serviceCommon.settings.lightImages; index as i"
+      >
+        <a
+          [href]="item['url'] || 'javascript:void(0)'"
+          [target]="item['url'] ? '_blank' : '_self'"
+        >
+          <img class="adsimg" [src]="item['src']" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <app-footer [content]="serviceCommon.settings.lightFooterHTML"></app-footer>
+  </div>
+  <app-fixbar
+    (onCollapse)="serviceCommon.onCollapseAll()"
+    [collapsed]="serviceCommon.collapsed"
+    selector=".main"
+  />
+</div>
