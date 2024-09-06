@@ -20,7 +20,7 @@ export interface ITagPropValues {
   id: number
   name: string
   color: string
-  createdAt: string
+  createdAt: string | number
   desc: string
   isInner: boolean
 
@@ -38,8 +38,8 @@ export interface IWebProps {
   name: string
   desc: string
   url: string
-  icon?: string
-  createdAt?: string
+  icon: string
+  createdAt: string | number
   rate?: number // 0-5
   top?: boolean
   index?: number // sort
@@ -55,7 +55,7 @@ export interface IWebProps {
 export interface INavThreeProp {
   title?: string
   icon?: string
-  createdAt?: string
+  createdAt?: string | number
   collapsed?: boolean
   ownVisible?: boolean
   nav: IWebProps[]
@@ -65,7 +65,7 @@ export interface INavThreeProp {
 export interface INavTwoProp {
   title?: string
   icon?: string
-  createdAt?: string
+  createdAt?: string | number
   collapsed?: boolean
   ownVisible?: boolean
   nav: INavThreeProp[]
@@ -76,7 +76,7 @@ export interface INavProps extends Object {
   title: string
   id?: number
   icon?: string | null
-  createdAt?: string
+  createdAt?: string | number
   ownVisible?: boolean
   collapsed?: boolean
   nav: INavTwoProp[]
@@ -114,11 +114,13 @@ export interface ISettings {
   errorUrlCount?: number
 
   appCardStyle: ICardType
+  appDocTitle: string
 
   lightCardStyle: ICardType
   lightOverType: OverType
   lightImages: Record<string, any>[]
   lightFooterHTML: string
+  lightDocTitle: string
 
   simThemeImages: Record<string, any>[]
   simThemeDesc: string
@@ -128,6 +130,7 @@ export interface ISettings {
   simTitle: string
   simOverType: OverType
   simFooterHTML: string
+  simDocTitle: string
 
   sideThemeImages: Record<string, any>[]
   sideThemeHeight: number
@@ -136,17 +139,20 @@ export interface ISettings {
   sideTitle: string
   sideFooterHTML: string
   sideCollapsed: boolean
+  sideDocTitle: string
 
   shortcutThemeImages: Record<string, any>[]
   shortcutThemeShowWeather: boolean
   shortcutTitle: string
   shortcutDockCount: number
+  shortDocTitle: string
 
   superTitle: string
   superOverType: OverType
   superCardStyle: ICardType
   superImages: Record<string, any>[]
   superFooterHTML: string
+  superDocTitle: string
 
   showRate: boolean
   mirrorList: Record<string, any>[]
@@ -161,6 +167,8 @@ export interface ISettings {
   spiderTimeout: number | string
 
   loadingCode: string
+
+  gitHubCDN: string
 }
 
 export type internalProps = {

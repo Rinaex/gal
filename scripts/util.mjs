@@ -64,7 +64,7 @@ export function getWebCount(websiteList) {
 }
 
 // 设置网站的面包屑类目显示
-export function setWeb(nav) {
+export function setWeb(nav, settings) {
   let id = 0 // 为每个网站设置唯一ID
   if (!Array.isArray(nav)) return
 
@@ -82,7 +82,7 @@ export function setWeb(nav) {
 
   function formatDate(item) {
     item.createdAt ||= Date.now()
-    item.createdAt = dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss')
+    item.createdAt = dayjs(item.createdAt).format('YYYY-MM-DD HH:mm')
   }
 
   for (let i = 0; i < nav.length; i++) {
@@ -124,7 +124,7 @@ export function setWeb(nav) {
                 webItem.name ||= ''
                 webItem.desc ||= ''
                 webItem.icon ||= ''
-                webItem.icon = replaceJsdelivrCDN(webItem.icon)
+                webItem.icon = replaceJsdelivrCDN(webItem.icon, settings)
                 webItem.url = webItem.url.trim()
                 webItem.desc = webItem.desc.trim()
 
@@ -169,9 +169,6 @@ export function setWeb(nav) {
 
 export function writeSEO(webs, payload) {
   const { settings, pkg } = payload
-  if (!settings.openSEO) {
-    return ''
-  }
   const nowDate = dayjs.tz().format('YYYY-MM-DD HH:mm:ss')
   let seoTemplate = `
 <div data-url="https://github.com/xjh22222228/nav" data-server-time="${Date.now()}" data-a="x.i.e-jiahe" data-date="${nowDate}" data-version="${
@@ -192,7 +189,9 @@ export function writeSEO(webs, payload) {
     }
   }
 
-  r(webs)
+  if (settings.openSEO) {
+    r(webs)
+  }
 
   seoTemplate += '</div>'
 
@@ -397,9 +396,14 @@ export async function spiderWeb(db, settings) {
   }
 }
 
-export function replaceJsdelivrCDN(str = '') {
-  // testingcf.jsdelivr.net
-  // img.jsdmirror.com
-  // gcore.jsdelivr.net
-  return str.replace('cdn.jsdelivr.net', 'gcore.jsdelivr.net')
+export function replaceJsdelivrCDN(str = '', settings) {
+  const cdn = settings?.gitHubCDN
+  if (!cdn) {
+    return str
+  }
+  str = str.replace('cdn.jsdelivr.net', cdn)
+  str = str.replace('testingcf.jsdelivr.net', cdn)
+  str = str.replace('img.jsdmirror.com', cdn)
+  str = str.replace('gcore.jsdelivr.net', cdn)
+  return str
 }

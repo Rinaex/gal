@@ -29,18 +29,30 @@ const routes: Routes = [
   {
     path: 'sim',
     component: SimComponent,
+    data: {
+      title: settings.simDocTitle,
+    },
   },
   {
     path: 'super',
     component: SuperComponent,
+    data: {
+      title: settings.superDocTitle,
+    },
   },
   {
     path: 'side',
     component: SideComponent,
+    data: {
+      title: settings.sideDocTitle,
+    },
   },
   {
     path: 'shortcut',
     component: ShortcutComponent,
+    data: {
+      title: settings.shortDocTitle,
+    },
   },
 
   {
@@ -48,11 +60,17 @@ const routes: Routes = [
     component: LightComponent,
     data: {
       renderLinear: true,
+      data: {
+        title: settings.lightDocTitle,
+      },
     },
   },
   {
     path: 'app',
     component: WebpComponent,
+    data: {
+      title: settings.appDocTitle,
+    },
   },
   {
     path: 'system',
@@ -108,11 +126,21 @@ const routes: Routes = [
       },
     ],
   },
-  {
-    path: '**',
-    redirectTo: '/' + settings.theme.toLowerCase(),
-  },
 ]
+
+const defaultTheme = settings.theme?.toLowerCase?.()
+const hasDefault = routes.find((item) => item.path === defaultTheme)
+if (hasDefault) {
+  routes.push({
+    ...hasDefault,
+    path: '**',
+  })
+} else {
+  routes.push({
+    path: '**',
+    redirectTo: '/' + defaultTheme,
+  })
+}
 
 @NgModule({
   imports: [
